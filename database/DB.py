@@ -126,7 +126,7 @@ def select_all_champions():
         rows = cur.fetchall()
 
         for row in rows:
-            result_list.append(Champion(row[0], row[1]))
+            result_list.append(Champion(row[0], row[1], False))
 
     return result_list
 
