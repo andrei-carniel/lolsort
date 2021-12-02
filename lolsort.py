@@ -1,4 +1,5 @@
 import sys
+
 from PyQt5.QtWidgets import QApplication, QMessageBox, QMainWindow
 
 from database import DB
@@ -20,6 +21,7 @@ class MainWindow:
         self.main_win = QMainWindow()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self.main_win)
+        # self.main_win.setStyleSheet("{background-image: url(:/ARAMzin.png);}");
 
         self.ui.button_add_nickname.clicked.connect(self.on_button_add_nickname_clicked)
         self.ui.button_remove_nickname.clicked.connect(self.on_button_remove_nickname_clicked)
@@ -94,7 +96,7 @@ class MainWindow:
             arr2.pop(total_players)
 
         for pos in range(1, (number_of_groups + 1)):
-            list_groups.append(Group(("Group " + str(pos)), []))
+            list_groups.append(Group(("Equipe " + str(pos)), []))
 
         for pos_x in range(len(list_groups)):
             list = []
@@ -126,9 +128,9 @@ class MainWindow:
 
         if len(list_wait) > 0:
             if groups_txt == "":
-                groups_txt += "Wait list"
+                groups_txt += "Lista de espera"
             else:
-                groups_txt += "\n\n Wait list"
+                groups_txt += "\n\nLista de espera"
 
             for pos in range(len(list_wait)):
                 groups_txt += "\n\t" + list_wait[pos].nickname
@@ -176,15 +178,15 @@ class MainWindow:
         global list_champions, champ_g1_txt, champ_g2_txt
 
         list_champ_name = []
-        champ_g1_txt = "Champions Group 1\n"
-        champ_g2_txt = "Champions Group 2\n"
+        champ_g1_txt = "Campeões para Seleção\n"
+        champ_g2_txt = "Campeões para Seleção\n"
 
         for champ in list_champions:
             if champ.ban == False:
                 list_champ_name.append(champ.name)
 
         if len(list_champ_name) < 31:
-            showdialog("Error", "You don't have enough champions to draw.")
+            showdialog("Erro", "Não há campeões não banidos suficientes para o sorteio.")
             champ_g1_txt = ""
             champ_g2_txt = ""
             self.ui.label_champions_g1.setText("")
@@ -203,7 +205,7 @@ class MainWindow:
         self.ui.label_champions_g1.setText("")
         self.ui.label_champions_g2.setText("")
 
-        showdialog("Success", "The list of champions was generated.")
+        showdialog("Sucesso", "As listas de campeões foram geradas.")
 
     def get_random(self, arr2):
         if (len(arr2) - 1) > 0:
