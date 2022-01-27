@@ -1,1 +1,1 @@
-DB_FILE = "database/Ontology_DB.db"  # Database path
+DB_FILE = "database/lolsort_DB.db"  # Database path
