@@ -77,6 +77,18 @@ def insert_to_nickname(nickname):
         conn.commit()
         return cur.lastrowid
 
+# insert one register to Table Nicknames
+def insert_to_champions(nickname):
+    # create a database connection
+    conn = create_connection()
+    with conn:
+        sql = "INSERT INTO champions (name) VALUES(?)"
+        cur = conn.cursor()
+        task = (nickname,)
+        cur.execute(sql, task)
+        conn.commit()
+        return cur.lastrowid
+
 # insert all Champions
 def insert_all_champions():
     # create a database connection
