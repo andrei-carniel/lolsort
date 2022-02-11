@@ -1,7 +1,8 @@
-import sys
+import sys, os
 
 from PyQt5.QtWidgets import QApplication, QMessageBox, QMainWindow
 
+import Constants
 from database import DB
 from objects.Group import Group
 from ui_mainwindow import Ui_MainWindow
@@ -15,6 +16,7 @@ list_wait = []
 groups_txt = ""
 champ_g1_txt = ""
 champ_g2_txt = ""
+champ_g3_txt = ""
 
 class MainWindow:
     def __init__(self):
@@ -30,9 +32,12 @@ class MainWindow:
 
         self.ui.button_ban_chanpion.clicked.connect(self.on_button_ban_champion_clicked)
         self.ui.button_unban_chanpion.clicked.connect(self.on_button_unban_champion_clicked)
+        self.ui.button_unban_all.clicked.connect(self.on_button_unban_all_clicked)
         self.ui.button_generate_champions_list.clicked.connect(self.on_button_generate_champions_groups_clicked)
+
         self.ui.button_cp_first.clicked.connect(self.on_button_cp_first_clicked)
         self.ui.button_cp_second.clicked.connect(self.on_button_cp_second_clicked)
+        self.ui.button_cp_third.clicked.connect(self.on_button_cp_third_clicked)
         self.ui.button_show_hide.clicked.connect(self.on_button_show_hide_clicked)
 
     def show(self):
@@ -166,6 +171,14 @@ class MainWindow:
 
         self.load_champions(False)
 
+    def on_button_unban_all_clicked(self):
+        global list_champions
+
+        for champ in list_champions:
+            champ.ban = False
+
+        self.load_champions(False)
+
     def update_champ(self, name_champ, ban_status):
         global list_champions
 
@@ -175,37 +188,65 @@ class MainWindow:
                 return
 
     def on_button_generate_champions_groups_clicked(self):
-        global list_champions, champ_g1_txt, champ_g2_txt
+        global list_champions, champ_g1_txt, champ_g2_txt, champ_g3_txt
 
         list_champ_name = []
-        champ_g1_txt = "Campeões para Seleção\n"
-        champ_g2_txt = "Campeões para Seleção\n"
+        champ_g1_txt = "Equipe Azul\n"
+        champ_g2_txt = "Equipe Vermelha\n"
+        champ_g3_txt = "Equipe Branca\n"
 
         for champ in list_champions:
             if champ.ban == False:
                 list_champ_name.append(champ.name)
 
-        if len(list_champ_name) < 31:
+        if len(list_champ_name) < 46:
             showdialog("Erro", "Não há campeões não banidos suficientes para o sorteio.")
             champ_g1_txt = ""
             champ_g2_txt = ""
+            champ_g3_txt = ""
             self.ui.label_champions_g1.setText("")
             self.ui.label_champions_g2.setText("")
+            self.ui.label_champions_g3.setText("")
             return
+
+        blue_team_list = []
+        red_team_list = []
+        white_team_list = []
 
         for pos_y in range(15):
             rdn1 = self.get_random(list_champ_name)
-            champ_g1_txt += "\n\t" + list_champ_name[rdn1]
+            # champ_g1_txt += "\n\t" + list_champ_name[rdn1]
+            blue_team_list.append(list_champ_name[rdn1])
             list_champ_name.pop(rdn1)
 
             rdn2 = self.get_random(list_champ_name)
-            champ_g2_txt += "\n\t" + list_champ_name[rdn2]
+            # champ_g2_txt += "\n\t" + list_champ_name[rdn2]
+            red_team_list.append(list_champ_name[rdn2])
             list_champ_name.pop(rdn2)
+
+            rdn3 = self.get_random(list_champ_name)
+            # champ_g3_txt += "\n\t" + list_champ_name[rdn3]
+            white_team_list.append(list_champ_name[rdn3])
+            list_champ_name.pop(rdn3)
 
         self.ui.label_champions_g1.setText("")
         self.ui.label_champions_g2.setText("")
+        self.ui.label_champions_g3.setText("")
+
+        champ_g1_txt += self.organize_and_create_list(blue_team_list)
+        champ_g2_txt += self.organize_and_create_list(red_team_list)
+        champ_g3_txt += self.organize_and_create_list(white_team_list)
 
         showdialog("Sucesso", "As listas de campeões foram geradas.")
+
+    def organize_and_create_list(self, list):
+        list.sort()
+        text = ""
+
+        for champ in list:
+            text += "\n  " + champ
+
+        return text
 
     def get_random(self, arr2):
         if (len(arr2) - 1) > 0:
@@ -218,13 +259,16 @@ class MainWindow:
 
         t1 = self.ui.label_champions_g1.text()
         t2 = self.ui.label_champions_g2.text()
+        t3 = self.ui.label_champions_g3.text()
 
-        if len(t1) > 0 or len(t2) > 0:
+        if len(t1) > 0 or len(t2) > 0 or len(t3) > 0:
             self.ui.label_champions_g1.setText("")
             self.ui.label_champions_g2.setText("")
+            self.ui.label_champions_g3.setText("")
         else:
             self.ui.label_champions_g1.setText(champ_g1_txt)
             self.ui.label_champions_g2.setText(champ_g2_txt)
+            self.ui.label_champions_g3.setText(champ_g3_txt)
 
     def on_button_cp_first_clicked(self):
         global champ_g1_txt, champ_g2_txt
@@ -240,6 +284,13 @@ class MainWindow:
         cb.clear(mode=cb.Clipboard)
         cb.setText(champ_g2_txt, mode=cb.Clipboard)
 
+    def on_button_cp_third_clicked(self):
+        global champ_g3_txt
+
+        cb = QApplication.clipboard()
+        cb.clear(mode=cb.Clipboard)
+        cb.setText(champ_g3_txt, mode=cb.Clipboard)
+
 def showdialog(title, message):
     msgBox = QMessageBox()
     msgBox.setIcon(QMessageBox.Information)
@@ -253,6 +304,11 @@ def showdialog(title, message):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    isExist = os.path.exists(Constants.DB_PATH)
+
+    if not isExist:
+        # Create a new directory because it does not exist
+        os.makedirs(Constants.DB_PATH)
     DB.create_all_tables()
     main_win = MainWindow()
     main_win.show()

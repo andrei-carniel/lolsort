@@ -49,6 +49,7 @@ def create_all_tables():
     if conn is not None:
         create_table(conn, table_champions())
         create_table(conn, table_nicknames())
+        insert_all_champions()
 
     else:
         print("Error! cannot create the database connection.")
@@ -82,9 +83,12 @@ def insert_to_champions(nickname):
     # create a database connection
     conn = create_connection()
     with conn:
-        sql = "INSERT INTO champions (name) VALUES(?)"
+        # sql = "INSERT INTO champions (name) VALUES(?)"
+        sql = "INSERT INTO champions (name) " \
+              "SELECT * FROM (SELECT ? AS name) AS temp " \
+              "WHERE NOT EXISTS (SELECT name FROM champions WHERE name = ?) LIMIT 1;"
         cur = conn.cursor()
-        task = (nickname,)
+        task = (nickname, nickname,)
         cur.execute(sql, task)
         conn.commit()
         return cur.lastrowid
@@ -93,12 +97,26 @@ def insert_to_champions(nickname):
 def insert_all_champions():
     # create a database connection
     conn = create_connection()
-    list = ["Aatrox", "Ahri", "Akali", "Akshan", "Alistar", "Amumu", "Anivia", "Annie", "Aphelios", "Ashe", "Aurelion-Sol", "Azir", "Bardo", "Blitzcrank", "Brand", "Braum", "Caitlyn", "Camille", "Cassiopeia", "Cho'Gath", "Corki", "Darius", "Diana", "Dr. Mundo", "Draven", "Ekko", "Elise", "Evelynn", "Ezreal", "Fiddlesticks", "Fiora", "Fizz", "Galio", "Gangplank", "Garen", "Gnar", "Gragas", "Graves", "Gwen", "Hecarim", "Heimerdinger", "Illaoi", "Irelia", "Ivern", "Janna", "Jarvan-IV", "Jax", "Jayce", "Jhin", "Jinx", "Kai'Sa", "Kalista", "Karma", "Karthus", "Kassadin", "Katarina", "Kayle", "Kayn", "Kennen", "Kha'Zix", "Kindred", "Kled", "Kog'Maw", "LeBlanc", "Lee-Sin", "Leona", "Lillia", "Lissandra", "Lucian", "Lulu", "Lux", "Malphite", "Malzahar", "Maokai", "Master-Yi", "Miss-Fortune", "Mordekaiser", "Morgana", "Nami", "Nasus", "Nautilus", "Neeko", "Nidalee", "Nocturne", "Nunu e Willump", "Olaf", "Orianna", "Ornn", "Pantheon", "Poppy", "Pyke", "Qiyana", "Quinn", "Rakan", "Rammus", "Rek'Sai", "Rell", "Renekton", "Rengar", "Riven", "Rumble", "Ryze", "Samira", "Sejuani", "Senna", "Seraphine", "Sett", "Shaco", "Shen", "Shyvana", "Singed", "Sion", "Sivir", "Skarner", "Sona", "Soraka", "Swain", "Sylas", "Syndra", "Tahm-Kench", "Taliyah", "Talon", "Taric", "Teemo", "Thresh", "Tristana", "Trundle", "Tryndamere", "Twisted-Fate", "Twitch", "Udyr", "Urgot", "Varus", "Vayne", "Veigar", "Vel'Koz", "Vex", "Vi", "Viego", "Viktor", "Vladimir", "Volibear", "Warwick", "Wukong", "Xayah", "Xerath", "Xin-Zhao", "Yasuo", "Yone", "Yorick", "Yuumi", "Zac", "Zed", "Ziggs", "Zilean", "Zoe", "Zyra"]
+    list = ["Aatrox", "Ahri", "Akali", "Akshan", "Alistar", "Amumu", "Anivia", "Annie", "Aphelios", "Ashe", "Aurelion-Sol", "Azir", "Bardo",
+            "Blitzcrank", "Brand", "Braum", "Caitlyn", "Camille", "Cassiopeia", "Cho'Gath", "Corki", "Darius", "Diana", "Dr. Mundo", "Draven",
+            "Ekko", "Elise", "Evelynn", "Ezreal", "Fiddlesticks", "Fiora", "Fizz", "Galio", "Gangplank", "Garen", "Gnar", "Gragas", "Graves",
+            "Gwen", "Hecarim", "Heimerdinger", "Illaoi", "Irelia", "Ivern", "Janna", "Jarvan-IV", "Jax", "Jayce", "Jhin", "Jinx", "Kai'Sa",
+            "Kalista", "Karma", "Karthus", "Kassadin", "Katarina", "Kayle", "Kayn", "Kennen", "Kha'Zix", "Kindred", "Kled", "Kog'Maw", "LeBlanc",
+            "Lee-Sin", "Leona", "Lillia", "Lissandra", "Lucian", "Lulu", "Lux", "Malphite", "Malzahar", "Maokai", "Master-Yi", "Miss-Fortune",
+            "Mordekaiser", "Morgana", "Nami", "Nasus", "Nautilus", "Neeko", "Nidalee", "Nocturne", "Nunu e Willump", "Olaf", "Orianna", "Ornn",
+            "Pantheon", "Poppy", "Pyke", "Qiyana", "Quinn", "Rakan", "Rammus", "Rek'Sai", "Rell", "Renata Glasc", "Renekton", "Rengar", "Riven", "Rumble", "Ryze",
+            "Samira", "Sejuani", "Senna", "Seraphine", "Sett", "Shaco", "Shen", "Shyvana", "Singed", "Sion", "Sivir", "Skarner", "Sona", "Soraka",
+            "Swain", "Sylas", "Syndra", "Tahm-Kench", "Taliyah", "Talon", "Taric", "Teemo", "Thresh", "Tristana", "Trundle", "Tryndamere",
+            "Twisted-Fate", "Twitch", "Udyr", "Urgot", "Varus", "Vayne", "Veigar", "Vel'Koz", "Vex", "Vi", "Viego", "Viktor", "Vladimir", "Volibear",
+            "Warwick", "Wukong", "Xayah", "Xerath", "Xin-Zhao", "Yasuo", "Yone", "Yorick", "Yuumi", "Zac", "Zed", "Ziggs", "Zilean", "Zoe", "Zyra"]
     with conn:
-        sql = "INSERT INTO champions (name) VALUES(?)"
+        # sql = "INSERT INTO champions (name) VALUES(?)"
+        sql = "INSERT INTO champions (name) " \
+              "SELECT * FROM (SELECT ? AS name) AS temp " \
+              "WHERE NOT EXISTS (SELECT name FROM champions WHERE name = ?) LIMIT 1;"
         cur = conn.cursor()
         for pos in range(len(list)):
-            task = (list[pos],)
+            task = (list[pos], list[pos],)
             cur.execute(sql, task)
         conn.commit()
         return cur.lastrowid
