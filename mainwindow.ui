@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Lolsort para ARAM v1.0 - by Slarav</string>
+   <string>Lolsort para ARAM v1.1.0 - by Slarav</string>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -418,13 +418,13 @@ QGroupBox::title {
                  <property name="minimumSize">
                   <size>
                    <width>160</width>
-                   <height>0</height>
+                   <height>35</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
                    <width>160</width>
-                   <height>16777215</height>
+                   <height>35</height>
                   </size>
                  </property>
                  <property name="font">
@@ -491,13 +491,13 @@ QGroupBox::title {
                  <property name="minimumSize">
                   <size>
                    <width>160</width>
-                   <height>0</height>
+                   <height>35</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
                    <width>160</width>
-                   <height>16777215</height>
+                   <height>35</height>
                   </size>
                  </property>
                  <property name="font">
@@ -564,13 +564,13 @@ QGroupBox::title {
                  <property name="minimumSize">
                   <size>
                    <width>160</width>
-                   <height>0</height>
+                   <height>35</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
                    <width>160</width>
-                   <height>16777215</height>
+                   <height>35</height>
                   </size>
                  </property>
                  <property name="font">
