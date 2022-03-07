@@ -314,3 +314,6 @@ if __name__ == '__main__':
     main_win.show()
 
     sys.exit(app.exec_())
+
+# pyuic5 -x mainwindow.ui -o ui_mainwindow.py
+# pyinstaller --onefile --paths .\venv\Lib\site-packages\ lolsort.py

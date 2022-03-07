@@ -369,7 +369,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Lolsort para ARAM v1.1.0 - by Slarav"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Lolsort para ARAM v1.1.1 - by Slarav"))
         self.groupBox.setTitle(_translate("MainWindow", "Sortear Equipes"))
         self.label.setText(_translate("MainWindow", "Nickname:"))
         self.button_add_nickname.setText(_translate("MainWindow", "Adicionar Nickname"))
